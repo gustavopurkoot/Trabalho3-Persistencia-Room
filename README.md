@@ -54,7 +54,7 @@ O usuário consulta unidades de atendimento (hospitais e clínicas) e agenda con
 3. Conecte um celular com depuração USB ativada ou inicie um emulador.
 4. Selecione a configuração `app` e clique em **Run**.
 
-> Os dados ficam só na memória: ao fechar o app, o que foi adicionado ou removido é perdido (persistência fica para o próximo trabalho).
+> Os dados ficam só na memória: ao fechar o app, o que foi adicionado ou removido é perdido.
 
 ## Estrutura do código
 
