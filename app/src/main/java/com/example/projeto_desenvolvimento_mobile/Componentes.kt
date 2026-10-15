@@ -1,5 +1,10 @@
 package com.example.projeto_desenvolvimento_mobile
 
+import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.widget.Toast
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.WindowInsets
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -70,5 +75,14 @@ fun BotaoVerde(
         colors = ButtonDefaults.buttonColors(containerColor = VerdePrincipal)
     ) {
         Text(texto, fontWeight = FontWeight.Bold)
+    }
+}
+
+fun abrirNoMapa(context: Context, endereco: String) {
+    val uri = Uri.parse("geo:0,0?q=" + Uri.encode(endereco))
+    try {
+        context.startActivity(Intent(Intent.ACTION_VIEW, uri))
+    } catch (e: ActivityNotFoundException) {
+        Toast.makeText(context, "Nenhum app de mapas disponível", Toast.LENGTH_SHORT).show()
     }
 }

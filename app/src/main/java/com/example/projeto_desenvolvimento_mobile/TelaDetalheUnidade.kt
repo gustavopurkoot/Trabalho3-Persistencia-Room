@@ -12,13 +12,17 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 
+
 @Composable
 fun TelaDetalheUnidade(navController: NavController, viewModel: AppViewModel, id: Int) {
+    val context = LocalContext.current
+
     // busca a unidade certa pelo id recebido na rota
     val unidade = viewModel.buscarUnidade(id)
 
@@ -110,6 +114,10 @@ fun TelaDetalheUnidade(navController: NavController, viewModel: AppViewModel, id
                             )
                         }
                     }
+                }
+
+                BotaoVerde("ABRIR NO MAPA") {
+                    abrirNoMapa(context, "${unidade.nome}, ${unidade.endereco}")
                 }
 
                 BotaoVerde("AGENDAR NESTA UNIDADE") {
