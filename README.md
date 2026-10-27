@@ -97,9 +97,7 @@ Depois de cada escrita, o ViewModel lê as listas de novo do banco, então a tel
 
 ## 5. Teste de persistência
 
-Passos do teste: adicionar um item, **fechar o app completamente** (tirando ele da lista de apps recentes), abrir de novo e conferir se o item continua lá.
-
-🎥 **Vídeo do teste (obrigatório):** https://drive.google.com/drive/folders/1jA9SJhdd84-jAcOe9ClGPwYar4Tpta3h?usp=sharing
+🎥 **Vídeo do teste:** https://drive.google.com/drive/folders/1jA9SJhdd84-jAcOe9ClGPwYar4Tpta3h?usp=sharing
 
 ---
 
