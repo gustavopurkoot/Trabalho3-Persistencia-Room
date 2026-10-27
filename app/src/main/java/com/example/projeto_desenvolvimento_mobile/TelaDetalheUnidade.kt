@@ -10,6 +10,11 @@ import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -23,8 +28,13 @@ import androidx.navigation.NavController
 fun TelaDetalheUnidade(navController: NavController, viewModel: AppViewModel, id: Int) {
     val context = LocalContext.current
 
-    // busca a unidade certa pelo id recebido na rota
-    val unidade = viewModel.buscarUnidade(id)
+    // Busca a unidade diretamente no Room pelo ID recebido na navegação.
+    var unidadeBanco by remember(id) { mutableStateOf<Unidade?>(null) }
+    LaunchedEffect(id) {
+        unidadeBanco = viewModel.buscarUnidadeNoBanco(id)
+        viewModel.carregar()
+    }
+    val unidade = unidadeBanco
 
     Column(
         modifier = Modifier

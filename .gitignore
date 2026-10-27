@@ -1,17 +1,44 @@
-*.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
-.DS_Store
+Gradle & Build files
+
+.gradle/
+build/
 /build
-/captures
-.externalNativeBuild
-.cxx
+/*/build
+app/build/
+*.lock
+
+Built application files
+
+*.apk
+*.aab
+*.ap_
+*.dex
+*.class
+
+Local configuration file (contém o caminho do seu SDK local)
+
 local.properties
 
+Android Studio / IntelliJ IDEA files
+
 .idea/
+*.iml
+.navigation/
+captures/
+.externalNativeBuild/
+.cxx/
+
+Proguard / Logs
+
+proguard/
+*.log
+
+Keystore & Keys (para segurança)
+
+*.jks
+*.keystore
+
+Arquivos do Sistema Operacional
+
+.DS_Store
+Thumbs.db

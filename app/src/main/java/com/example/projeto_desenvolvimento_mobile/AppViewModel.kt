@@ -1,54 +1,105 @@
 package com.example.projeto_desenvolvimento_mobile
 
-import androidx.compose.runtime.mutableStateListOf
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import android.util.Log
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
+import androidx.lifecycle.AndroidViewModel
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-// As duas listas moram aqui para todas as telas enxergarem os mesmos dados.
-// Ficam só na memória (mutableStateListOf), como o trabalho permite.
-class AppViewModel : ViewModel() {
+// Mesma API de antes (as telas quase não mudam), mas agora tudo passa pelo Room.
+// As listas continuam sendo "estado" do Compose: quando o banco é lido, a tela atualiza sozinha.
+class AppViewModel(app: Application) : AndroidViewModel(app) {
 
-    val unidades = mutableStateListOf(
-        Unidade(1, "Hospital Central", "Rua da Silva, 60", 8, "+55 41 99999-9999"),
-        Unidade(2, "Hospital Santa Cruz", "Av. Brasil, 1200", 3, "+55 41 98888-8888"),
-        Unidade(3, "Clínica Vida", "Rua das Flores, 45", 12, "+55 41 97777-7777")
-    )
+    private val db = AppDatabase.getDatabase(app)
+    private val unidadeDao = db.unidadeDAO()
+    private val consultaDao = db.consultaDAO()
 
-    val consultas = mutableStateListOf(
-        Consulta(1, 1, "Cardiologia", "20/10/2026", "Levar exames anteriores")
-    )
+    var unidades by mutableStateOf<List<Unidade>>(emptyList())
+        private set
+    var consultas by mutableStateOf<List<Consulta>>(emptyList())
+        private set
 
-    private var proximoIdUnidade = 4
-    private var proximoIdConsulta = 2
+    init {
+        carregar()
+    }
+
+    // toda operação de banco roda no Dispatchers.IO, com try/catch
+    private fun rodar(erro: String, acao: suspend () -> Unit) {
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                acao()
+            } catch (e: Exception) {
+                Log.e(erro, "Msg ${e.message}")
+            }
+        }
+    }
+
+    private suspend fun recarregar() {
+        unidades = unidadeDao.buscarTodas()
+        consultas = consultaDao.buscarTodas()
+    }
+
+    fun carregar() = rodar("Erro ao carregar") { recarregar() }
 
     // ---------- Unidades ----------
-    fun adicionarUnidade(nome: String, endereco: String, distanciaKm: Int, telefone: String) {
-        unidades.add(Unidade(proximoIdUnidade++, nome, endereco, distanciaKm, telefone))
+    fun adicionarUnidade(nome: String, endereco: String, distanciaKm: Int, telefone: String) =
+        rodar("Erro ao inserir unidade") {
+            unidadeDao.inserir(Unidade(nome = nome, endereco = endereco, distanciaKm = distanciaKm, telefone = telefone))
+            recarregar()
+        }
+
+    fun removerUnidade(id: Int) = rodar("Erro ao remover unidade") {
+        unidades.find { it.id == id }?.let {
+            consultaDao.deletarPorUnidade(id)
+            unidadeDao.deletar(it)
+        }
+        recarregar()
     }
 
-    fun removerUnidade(id: Int) {
-        unidades.removeAll { it.id == id }
-        // consultas de uma unidade removida deixam de fazer sentido
-        consultas.removeAll { it.unidadeId == id }
-    }
-
+    // usada pelas outras telas (lê da lista já carregada)
     fun buscarUnidade(id: Int): Unidade? = unidades.find { it.id == id }
 
-    // ---------- Consultas ----------
-    fun adicionarConsulta(unidadeId: Int, especialidade: String, data: String, observacoes: String) {
-        consultas.add(Consulta(proximoIdConsulta++, unidadeId, especialidade, data, observacoes))
+    // usada na tela de detalhes: busca direto no banco pelo id
+    suspend fun buscarUnidadeNoBanco(id: Int): Unidade? = withContext(Dispatchers.IO) {
+        try {
+            unidadeDao.buscarPorId(id)
+        } catch (e: Exception) {
+            Log.e("Erro ao buscar unidade", "Msg ${e.message}")
+            null
+        }
     }
 
-    fun removerConsulta(id: Int) {
-        consultas.removeAll { it.id == id }
+    // ---------- Consultas ----------
+    fun adicionarConsulta(unidadeId: Int, especialidade: String, data: String, observacoes: String) =
+        rodar("Erro ao inserir consulta") {
+            consultaDao.inserir(Consulta(unidadeId = unidadeId, especialidade = especialidade, data = data, observacoes = observacoes))
+            recarregar()
+        }
+
+    fun removerConsulta(id: Int) = rodar("Erro ao remover consulta") {
+        consultas.find { it.id == id }?.let { consultaDao.deletar(it) }
+        recarregar()
     }
 
     fun buscarConsulta(id: Int): Consulta? = consultas.find { it.id == id }
 
-    fun alternarRealizada(id: Int) {
-        val indice = consultas.indexOfFirst { it.id == id }
-        if (indice >= 0) {
-            consultas[indice] = consultas[indice].copy(realizada = !consultas[indice].realizada)
+    fun alternarRealizada(id: Int) = rodar("Erro ao atualizar consulta") {
+        consultas.find { it.id == id }?.let {
+            consultaDao.atualizar(it.copy(realizada = !it.realizada))
         }
+        recarregar()
+    }
+
+    fun atualizarObservacoes(id: Int, observacoes: String) = rodar("Erro ao editar consulta") {
+        consultas.find { it.id == id }?.let {
+            consultaDao.atualizar(it.copy(observacoes = observacoes))
+        }
+        recarregar()
     }
 
     fun consultasDaUnidade(unidadeId: Int): List<Consulta> =

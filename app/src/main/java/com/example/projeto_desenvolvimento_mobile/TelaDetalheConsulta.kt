@@ -11,7 +11,13 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.CheckboxDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.OutlinedTextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -22,7 +28,10 @@ import androidx.navigation.NavController
 
 @Composable
 fun TelaDetalheConsulta(navController: NavController, viewModel: AppViewModel, id: Int) {
+    var observacoes by remember(id) { mutableStateOf("") }
+    LaunchedEffect(id) { viewModel.carregar() }
     val consulta = viewModel.buscarConsulta(id)
+    LaunchedEffect(consulta?.id) { observacoes = consulta?.observacoes.orEmpty() }
 
     Column(
         modifier = Modifier
@@ -62,10 +71,16 @@ fun TelaDetalheConsulta(navController: NavController, viewModel: AppViewModel, i
                         )
                         Spacer(modifier = Modifier.height(12.dp))
                         LinhaInfo("Data", consulta.data)
-                        LinhaInfo(
-                            "Observações",
-                            consulta.observacoes.ifBlank { "Sem observações" }
+                        OutlinedTextField(
+                            value = observacoes,
+                            onValueChange = { observacoes = it },
+                            label = { Text("Editar observações") },
+                            modifier = Modifier.fillMaxWidth()
                         )
+                        Spacer(modifier = Modifier.height(8.dp))
+                        BotaoVerde("SALVAR OBSERVAÇÕES") {
+                            viewModel.atualizarObservacoes(consulta.id, observacoes.trim())
+                        }
 
                         Row(
                             modifier = Modifier
