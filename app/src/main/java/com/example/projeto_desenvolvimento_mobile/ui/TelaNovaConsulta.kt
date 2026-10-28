@@ -1,4 +1,4 @@
-package com.example.projeto_desenvolvimento_mobile
+package com.example.projeto_desenvolvimento_mobile.ui
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -21,6 +21,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.projeto_desenvolvimento_mobile.AppViewModel
 
 @Composable
 fun TelaNovaConsulta(navController: NavController, viewModel: AppViewModel, unidadeIdInicial: Int) {

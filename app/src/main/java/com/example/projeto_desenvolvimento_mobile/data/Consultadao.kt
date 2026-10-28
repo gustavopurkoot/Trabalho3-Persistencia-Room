@@ -1,4 +1,4 @@
-package com.example.projeto_desenvolvimento_mobile
+package com.example.projeto_desenvolvimento_mobile.data
 
 import androidx.room3.Dao
 import androidx.room3.Delete

@@ -1,4 +1,4 @@
-package com.example.projeto_desenvolvimento_mobile
+package com.example.projeto_desenvolvimento_mobile.data
 
 import android.content.Context
 import androidx.room3.Database

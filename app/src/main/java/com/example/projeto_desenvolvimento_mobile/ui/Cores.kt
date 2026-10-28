@@ -1,4 +1,4 @@
-package com.example.projeto_desenvolvimento_mobile
+package com.example.projeto_desenvolvimento_mobile.ui
 
 import androidx.compose.ui.graphics.Color
 

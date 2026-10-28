@@ -1,4 +1,4 @@
-package com.example.projeto_desenvolvimento_mobile
+package com.example.projeto_desenvolvimento_mobile.ui
 
 object Rotas {
     // abas do BottomNavigation

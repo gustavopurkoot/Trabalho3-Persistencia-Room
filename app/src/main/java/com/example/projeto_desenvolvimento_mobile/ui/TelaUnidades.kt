@@ -1,4 +1,4 @@
-package com.example.projeto_desenvolvimento_mobile
+package com.example.projeto_desenvolvimento_mobile.ui
 
 import android.content.ActivityNotFoundException
 import android.content.Intent
@@ -41,6 +41,8 @@ import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.projeto_desenvolvimento_mobile.AppViewModel
+import com.example.projeto_desenvolvimento_mobile.data.Unidade
 
 @Composable
 fun TelaUnidadesAtendimento(navController: NavController, viewModel: AppViewModel) {

@@ -1,4 +1,4 @@
-package com.example.projeto_desenvolvimento_mobile
+package com.example.projeto_desenvolvimento_mobile.ui
 
 import android.content.ActivityNotFoundException
 import android.content.Context

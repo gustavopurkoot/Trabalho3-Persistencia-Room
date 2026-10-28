@@ -1,4 +1,4 @@
-package com.example.projeto_desenvolvimento_mobile
+package com.example.projeto_desenvolvimento_mobile.ui
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -7,6 +7,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
+import com.example.projeto_desenvolvimento_mobile.AppViewModel
 
 // NavHost central: todas as 7 telas do app passam por aqui.
 @Composable

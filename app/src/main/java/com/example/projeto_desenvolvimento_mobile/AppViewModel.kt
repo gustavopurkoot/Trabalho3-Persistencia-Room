@@ -6,6 +6,9 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
+import com.example.projeto_desenvolvimento_mobile.data.AppDatabase
+import com.example.projeto_desenvolvimento_mobile.data.Consulta
+import com.example.projeto_desenvolvimento_mobile.data.Unidade
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -49,7 +52,14 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     // ---------- Unidades ----------
     fun adicionarUnidade(nome: String, endereco: String, distanciaKm: Int, telefone: String) =
         rodar("Erro ao inserir unidade") {
-            unidadeDao.inserir(Unidade(nome = nome, endereco = endereco, distanciaKm = distanciaKm, telefone = telefone))
+            unidadeDao.inserir(
+                Unidade(
+                    nome = nome,
+                    endereco = endereco,
+                    distanciaKm = distanciaKm,
+                    telefone = telefone
+                )
+            )
             recarregar()
         }
 
@@ -77,7 +87,14 @@ class AppViewModel(app: Application) : AndroidViewModel(app) {
     // ---------- Consultas ----------
     fun adicionarConsulta(unidadeId: Int, especialidade: String, data: String, observacoes: String) =
         rodar("Erro ao inserir consulta") {
-            consultaDao.inserir(Consulta(unidadeId = unidadeId, especialidade = especialidade, data = data, observacoes = observacoes))
+            consultaDao.inserir(
+                Consulta(
+                    unidadeId = unidadeId,
+                    especialidade = especialidade,
+                    data = data,
+                    observacoes = observacoes
+                )
+            )
             recarregar()
         }
 

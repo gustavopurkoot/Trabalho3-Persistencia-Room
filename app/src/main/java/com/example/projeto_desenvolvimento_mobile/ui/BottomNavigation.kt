@@ -1,4 +1,4 @@
-package com.example.projeto_desenvolvimento_mobile
+package com.example.projeto_desenvolvimento_mobile.ui
 
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.DateRange
@@ -12,6 +12,7 @@ import androidx.compose.material3.NavigationBarItemDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.NavHostController
@@ -48,7 +49,7 @@ fun BottomNavBar(navController: NavHostController) {
                 icon = { Icon(aba.icone, contentDescription = aba.rotulo) },
                 label = { Text(aba.rotulo) },
                 colors = NavigationBarItemDefaults.colors(
-                    selectedIconColor = androidx.compose.ui.graphics.Color.White,
+                    selectedIconColor = Color.White,
                     indicatorColor = VerdePrincipal
                 )
             )
