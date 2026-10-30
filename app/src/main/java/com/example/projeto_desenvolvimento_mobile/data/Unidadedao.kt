@@ -5,6 +5,7 @@ import androidx.room3.Delete
 import androidx.room3.Insert
 import androidx.room3.Query
 import androidx.room3.Update
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface UnidadeDAO {
@@ -12,10 +13,11 @@ interface UnidadeDAO {
     @Insert
     suspend fun inserir(unidade: Unidade)
 
+    // Flow: o Room atualiza a lista sozinho sempre que a tabela muda
     @Query("SELECT * FROM unidades")
-    suspend fun buscarTodas(): List<Unidade>
+    fun buscarTodos(): Flow<List<Unidade>>
 
-    // consulta extra, filtrando por campo (usada na tela de detalhes)
+    // consulta extra, filtrando por campo
     @Query("SELECT * FROM unidades WHERE id = :id")
     suspend fun buscarPorId(id: Int): Unidade?
 
